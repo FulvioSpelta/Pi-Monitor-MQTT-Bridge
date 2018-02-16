@@ -23,6 +23,18 @@ module.exports = {
         res     = execsync( "vcgencmd measure_volts " + point ).toString().trim();
         return parseFloat( res.substr(res.indexOf('=')+1,6) );
     },
+    /* Function to get RAM info*/
+    getMemory: function( info ) {
+        temp_str = execsync( "cat /proc/meminfo" ).toString().trim();
+        return parseFloat( temp_str.substr(temp_str.indexOf(info)+16, 10) );
+    },
+    /* Function to get sd info */
+    getSD: function( info ) {
+        temp_str = execsync( "df" ).toString().trim();
+				var myRegexp = new RegExp('(?:\\D*(\\d+)){' + info.toString() + '}');
+				var match = myRegexp.exec(temp_str);
+        return parseFloat( match[1] );
+    },
     getVoltCore: function() {
         return this.getVoltage( 'core' );
     },
